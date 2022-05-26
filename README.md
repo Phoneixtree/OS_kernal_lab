@@ -1,5 +1,4 @@
-# WHU 2022 OSkernal_LAB
-## 操作系统内核实验1_2
+# 操作系统内核实验1_2
 在lab1_1修改的基础上
 修改kernal/machine/mtrap.c
 ```C++
