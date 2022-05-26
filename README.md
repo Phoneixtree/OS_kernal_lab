@@ -1,38 +1,26 @@
-# WHU 2022 OSkernal_LAB
-## 操作系统内核实验1_2
-在lab1_1修改的基础上
-修改kernal/machine/mtrap.c
+# 操作系统内核实验1_1
+修改kernal/strap.c
 ```C++
-void handle_mtrap() {
-  uint64 mcause = read_csr(mcause);
-  switch (mcause) {
-    case CAUSE_FETCH_ACCESS:
-      handle_instruction_access_fault();
-      break;
-    case CAUSE_LOAD_ACCESS:
-      handle_load_access_fault();
-    case CAUSE_STORE_ACCESS:
-      handle_store_access_fault();
-      break;
-    case CAUSE_ILLEGAL_INSTRUCTION:
-      // TODO (lab1_2): call handle_illegal_instruction to implement illegal instruction
-      // interception, and finish lab1_2.
-      //panic( "call handle_illegal_instruction to accomplish illegal instruction interception for lab1_2.\n" );
-      handle_illegal_instruction();
-      break;
-    case CAUSE_MISALIGNED_LOAD:
-      handle_misaligned_load();
-      break;
-    case CAUSE_MISALIGNED_STORE:
-      handle_misaligned_store();
-      break;
+static void handle_syscall(trapframe *tf) {
+  // tf->epc points to the address that our computer will jump to after the trap handling.
+  // for a syscall, we should return to the NEXT instruction after its handling.
+  // in RV64G, each instruction occupies exactly 32 bits (i.e., 4 Bytes)
+  tf->epc += 4;
 
-    default:
-      sprint("machine trap(): unexpected mscause %p\n", mcause);
-      sprint("            mepc=%p mtval=%p\n", read_csr(mepc), read_csr(mtval));
-      panic( "unexpected exception happened in M-mode.\n" );
-      break;
-  }
+  // TODO (lab1_1): remove the panic call below, and call do_syscall (defined in
+  // kernel/syscall.c) to conduct real operations of the kernel side for a syscall.
+  // IMPORTANT: return value should be returned to user app, or else, you will encounter
+  // problems in later experiments!
+  long a0=tf->regs.a0;
+  long a1=tf->regs.a1;
+  long a2=tf->regs.a2;
+  long a3=tf->regs.a3;
+  long a4=tf->regs.a4;
+  long a5=tf->regs.a5;
+  long a6=tf->regs.a6;
+  long a7=tf->regs.a7;
+  do_syscall(a0,a1,a2,a3,a4,a5,a6,a7);
+  //panic( "call do_syscall to accomplish the syscall and lab1_1 here.\n" );
 }
 ```
 重新编译即可成功执行
