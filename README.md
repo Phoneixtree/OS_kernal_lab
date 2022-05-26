@@ -1,5 +1,4 @@
-# WHU 2022 OSkernal_LAB
-## 操作系统内核实验1_3
+# 操作系统内核实验1_3
 在lab1_2修改的基础上
 修改kernal/strap.c
 ```C++
