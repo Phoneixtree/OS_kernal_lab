@@ -19,7 +19,7 @@ static void handle_syscall(trapframe *tf) {
   long a5=tf->regs.a5;
   long a6=tf->regs.a6;
   long a7=tf->regs.a7;
-  do_syscall(a0,a1,a2,a3,a4,a5,a6,a7);
+  tf->regs.a0=do_syscall(a0,a1,a2,a3,a4,a5,a6,a7);
   //panic( "call do_syscall to accomplish the syscall and lab1_1 here.\n" );
 }
 ```
